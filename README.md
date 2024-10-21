@@ -2,7 +2,11 @@
 
 **Overview**
 
-This project implements a rule engine using a 3-tier architecture with an Abstract Syntax Tree (AST) to evaluate user eligibility based on various attributes like age, department, income, and experience. The application features a user-friendly interface and provides a robust API for rule creation, combination, and evaluation.
+Implementing a robust rule engine using a 3-tier architecture with Abstract Syntax Tree (AST) to evaluate user eligibility based on various attributes.
+Key Features:
+User-friendly interface
+Robust API for rule creation, combination, and evaluation
+Supports multiple attributes (age, department, income, experience)
 
 GitHub Usage
 This project is hosted on GitHub, where you can find the complete codebase, build scripts, and configurations. Follow the link below to access the repository:
