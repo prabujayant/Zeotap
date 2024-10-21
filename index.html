@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rule Engine</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script>
+      let currentAst; // Variable to hold the current AST
+
+      function createRule() {
+        const rule = document.getElementById("ruleInput").value; // Get the rule from input
+        fetch("/create_rule", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ rule: rule }),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.ast) {
+              console.log("AST Created:", result.ast);
+              currentAst = result.ast; // Save the AST for later use
+              document.getElementById("astOutput").textContent = JSON.stringify(
+                result.ast,
+                null,
+                2
+              ); // Display the AST
+            }
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+          });
+      }
+
+      function evaluateRule() {
+        if (!currentAst) {
+          return; // Ensure currentAst is defined before using it
+        }
+
+        // Get data from inputs
+        const data = {
+          age: parseInt(document.getElementById("age").value),
+          department: document.getElementById("department").value,
+          salary: parseInt(document.getElementById("salary").value),
+          experience: parseInt(document.getElementById("experience").value),
+        };
+
+        fetch("/evaluate_rule", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ast: currentAst, data: data }),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            document.getElementById("evalOutput").textContent =
+              "Result: " + result.result; // Display result on UI
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1>Rule Engine</h1>
+    </header>
+
+    <div class="container">
+      <h2>Create Rule</h2>
+      <label for="ruleInput">Enter Rule:</label>
+      <input
+        type="text"
+        id="ruleInput"
+        placeholder="(age > 30 AND salary > 50000)"
+      />
+      <button onclick="createRule()">Create Rule</button>
+
+      <h2>AST:</h2>
+      <pre id="astOutput"></pre>
+
+      <h2>Evaluate Rule</h2>
+      <label for="age">Age: </label>
+      <input type="number" id="age" value="35" />
+      <label for="department">Department: </label>
+      <input type="text" id="department" value="Sales" />
+      <label for="salary">Salary: </label>
+      <input type="number" id="salary" value="60000" />
+      <label for="experience">Experience: </label>
+      <input type="number" id="experience" value="3" />
+      <button onclick="evaluateRule()">Evaluate</button>
+
+      <h2>Evaluation Result:</h2>
+      <pre id="evalOutput"></pre>
+    </div>
+  </body>
+</html>
