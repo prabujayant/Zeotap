@@ -12,7 +12,7 @@ This project is hosted on GitHub, where you can find the complete codebase, buil
 **Installation**
 Clone the repository:
 
-git clone https://github.com/AjayGurjar1/Rule-Engine-with-AST 
+git clone
 
 cd rule-engine
 
